@@ -9,8 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
-/* Layout concept: a light paper column for reading, interrupted by one black
-   "tabletop" band (the lab workspace) where every demo video sits. The three
+/* Layout concept: sections alternate between light grey and white. The three
    target pads of the real scene (red, white, blue) are the only strong colours. */
 :root {
   --bg: #F3F4F6;
@@ -25,36 +24,18 @@
   --human: #B9BEC6;
   --chip-bg: #E9ECF0;
   /* the tabletop band keeps its own colours in both themes */
-  --stage: #121416;
-  --stage-2: #1C1F23;
-  --stage-line: #2E333A;
-  --stage-ink: #ECEEF0;
-  --stage-muted: #98A1AC;
-  --stage-red: #F0594D;
-  --stage-blue: #7B9DFF;
+  --stage: #FFFFFF;
+  --stage-2: #E9ECF0;
+  --stage-line: #D8DCE2;
+  --stage-ink: #15181D;
+  --stage-muted: #58616D;
+  --stage-red: #D2382D;
+  --stage-blue: #2450C8;
   --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
   --body: "IBM Plex Sans", -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
   --wrap: 1120px;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0E1012;
-    --surface: #171A1E;
-    --ink: #ECEEF0;
-    --muted: #9AA3AD;
-    --line: #2A2F36;
-    --pad-red: #F0594D;
-    --pad-blue: #7B9DFF;
-    --pad-white: #E9E6DE;
-    --accent: #8FADFF;
-    --human: #4A515B;
-    --chip-bg: #22262C;
-    --stage: #07080A;
-    color-scheme: dark;
-  }
-}
-
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 body {
@@ -96,9 +77,9 @@ p { margin: 0; }
 .nav .wrap { display: flex; align-items: center; gap: 24px; height: 56px; }
 .brand { display: flex; align-items: center; gap: 10px; font: 700 1.05rem var(--display); color: var(--ink); text-decoration: none; }
 .loop { width: 22px; height: 22px; flex: none; }
-.loop .track { fill: none; stroke: var(--line); stroke-width: 2.5; }
-.loop .arc { fill: none; stroke: var(--pad-red); stroke-width: 2.5; stroke-linecap: round; }
-.loop .boulder { fill: var(--ink); transform-origin: 12px 12px; animation: orbit 6s linear infinite; }
+.hloop .track { fill: none; stroke: var(--line); stroke-width: 2.5; }
+.hloop .arc { fill: none; stroke: var(--pad-red); stroke-width: 2.5; stroke-linecap: round; }
+.hloop .boulder { fill: var(--ink); transform-origin: 12px 12px; animation: orbit 6s linear infinite; }
 @keyframes orbit { to { transform: rotate(360deg); } }
 .nav nav { display: flex; gap: 22px; margin-left: auto; overflow-x: auto; scrollbar-width: none; }
 .nav nav a { color: var(--muted); text-decoration: none; font-size: 0.92rem; white-space: nowrap; }
@@ -118,7 +99,30 @@ p { margin: 0; }
   font: 500 clamp(1.1rem, 2.2vw, 1.5rem)/1.3 var(--display);
   margin-top: 18px; max-width: 30ch;
 }
-.hero-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 40px; align-items: end; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 40px; align-items: stretch; }
+.hero-side { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; padding-top: 30px; }
+.hloop { margin: 0; }
+.hloop-hd { display: flex; justify-content: space-between; font: 500 0.8rem var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.hloop-hd b { font-weight: 500; margin-right: 14px; }
+.hloop-hd i { font-style: normal; }
+.hloop svg { display: block; width: 100%; height: auto; }
+.hloop .tbl { fill: var(--surface); stroke: var(--line); }
+.hloop .pad { fill: none; stroke-width: 1.5; stroke-dasharray: 4 4; }
+.hloop .p1 { stroke: var(--pad-red); } .hloop .p2 { stroke: var(--pad-blue); } .hloop .p3 { stroke: var(--muted); }
+.hloop .blk { transform-box: fill-box; transform-origin: center; }
+.hloop .b1 { fill: var(--pad-red); } .hloop .b2 { fill: var(--pad-blue); } .hloop .b3 { fill: var(--pad-white); stroke: var(--muted); }
+@media (prefers-reduced-motion: no-preference) {
+  .hloop .b1 { animation: lp1 8s cubic-bezier(.5,0,.2,1) infinite; }
+  .hloop .b2 { animation: lp2 8s cubic-bezier(.5,0,.2,1) infinite; }
+  .hloop .b3 { animation: lp3 8s cubic-bezier(.5,0,.2,1) infinite; }
+  .hloop .lt { animation: lpt 8s steps(1) infinite; }
+  .hloop .lr { animation: lpr 8s steps(1) infinite; }
+}
+@keyframes lp1 { 0%, 8% { transform: none; } 26%, 42% { transform: translate(150px, 62px) rotate(24deg); } 56%, 100% { transform: none; } }
+@keyframes lp2 { 0%, 8% { transform: none; } 26%, 57% { transform: translate(198px, -52px) rotate(-18deg); } 71%, 100% { transform: none; } }
+@keyframes lp3 { 0%, 8% { transform: none; } 26%, 72% { transform: translate(108px, -38px) rotate(38deg); } 86%, 100% { transform: none; } }
+@keyframes lpt { 0% { color: var(--ink); } 40%, 100% { color: var(--muted); } }
+@keyframes lpr { 0% { color: var(--muted); } 40% { color: var(--pad-red); } 88%, 100% { color: var(--muted); } }
 .hero .lede { margin-top: 22px; }
 .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
 .btn {
@@ -135,6 +139,9 @@ p { margin: 0; }
 /* ---------- sections ---------- */
 section { padding-block: 72px; }
 .head { display: grid; gap: 14px; margin-bottom: 36px; }
+/* section labels: larger and darker than other small caps, with a red tick in front */
+.head > .eyebrow { display: flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 600; line-height: 1.3; color: var(--ink); }
+.head > .eyebrow::before { content: ""; flex: none; width: 28px; height: 3px; border-radius: 2px; background: var(--pad-red); }
 .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
 .prose { display: grid; gap: 16px; max-width: 65ch; }
 .plate { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
@@ -150,7 +157,7 @@ figure { margin: 0; }
 .tok {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 1px 8px; border-radius: 5px; line-height: 1.5;
-  background: rgba(255,255,255,0.1); white-space: nowrap;
+  background: var(--chip-bg); white-space: nowrap;
 }
 .on-paper .tok { background: var(--chip-bg); }
 .tok i { width: 9px; height: 9px; border-radius: 50%; flex: none; border: 1px solid rgba(128,128,128,0.5); }
@@ -169,9 +176,53 @@ figure { margin: 0; }
 .brace { font: 500 0.84rem var(--mono); border-top: 2px solid var(--ink); padding-top: 6px; width: 84.7%; }
 
 /* method steps */
+/* Fig. 2 walk-through: the region for the current step stays lit, the rest is washed out */
+.walk { position: relative; overflow: hidden; }
+.walk .spot { position: absolute; left: 0; top: 0; width: 100%; height: 100%; border-radius: 8px; pointer-events: none; box-shadow: 0 0 0 4000px rgba(255, 255, 255, 0); outline: 2px solid transparent; outline-offset: 0; transition: left .6s cubic-bezier(.3,.6,.2,1), top .6s cubic-bezier(.3,.6,.2,1), width .6s cubic-bezier(.3,.6,.2,1), height .6s cubic-bezier(.3,.6,.2,1), box-shadow .4s ease, outline-color .4s ease; }
+.walk.on .spot { box-shadow: 0 0 0 4000px rgba(255, 255, 255, 0.78); outline-color: var(--pad-red); }
+.steps > div { position: relative; cursor: default; }
+.steps > div::before { content: ""; position: absolute; left: 0; right: 24px; top: -2px; height: 3px; background: var(--pad-red); transform: scaleX(0); transform-origin: left; transition: transform .5s cubic-bezier(.3,.6,.2,1); }
+.steps > div + div::before { left: 24px; }
+.steps > div.cur::before { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) { .walk .spot, .steps > div::before { transition: none; } }
+
+.walknav { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.walknav button { font: 500 0.76rem var(--mono); min-width: 34px; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; }
+.walknav button:hover { color: var(--ink); border-color: var(--ink); }
+.walknav button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.walknav button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.walkcap { min-height: 2.8em; max-width: none; font-size: 0.92rem; }
+.walkcap b { font: 500 0.76rem var(--mono); color: var(--pad-red); margin-right: 8px; }
+
 .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin-top: 36px; border-top: 1px solid var(--ink); }
 .steps > div { padding: 20px 24px 0 0; display: grid; gap: 10px; align-content: start; }
 .steps > div + div { padding-left: 24px; border-left: 1px solid var(--line); }
+@media (min-width: 861px) {
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(3, auto); grid-auto-flow: column; }
+  .steps > div:nth-child(-n+3) { padding: 20px 32px 26px 0; border-left: 0; }
+  .steps > div:nth-child(-n+3)::before { left: 0; right: 32px; }
+  .steps > div:nth-child(n+4) { padding: 20px 0 26px 32px; border-left: 1px solid var(--line); }
+  .steps > div:nth-child(n+4)::before { left: 32px; right: 0; }
+  .steps > div:nth-child(3n+2), .steps > div:nth-child(3n) { border-top: 1px solid var(--line); }
+}
+@media (min-width: 1180px) { /* notes wrap the figure: 1-3 down its right side, 4-6 in a row beneath */
+  .mflank { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: auto auto 1fr auto; column-gap: 32px; align-items: start; }
+  .mflank > figure { grid-column: 2 / span 2; grid-row: 1 / span 3; margin: 0; }
+  .mflank .steps { display: contents; }
+  .mflank .steps > div:nth-child(n) { padding: 12px 0 14px; border-left: 0; border-top: 1px solid var(--line); gap: 4px; }
+  .mflank .steps > div:nth-child(n)::before { left: 0; right: 0; top: -2px; }
+  .mflank .steps > div:nth-child(-n+3) { grid-column: 1; }
+  .mflank .steps > div:nth-child(1) { grid-row: 1; border-top-color: var(--ink); }
+  .mflank .steps > div:nth-child(2) { grid-row: 2; }
+  .mflank .steps > div:nth-child(3) { grid-row: 3; }
+  .mflank .steps > div:nth-child(n+4) { grid-row: 4; margin-top: 22px; border-top-color: var(--ink); }
+  .mflank .steps > div:nth-child(4) { grid-column: 1; }
+  .mflank .steps > div:nth-child(5) { grid-column: 2; }
+  .mflank .steps > div:nth-child(6) { grid-column: 3; }
+  .mflank .steps h3 { font-size: 0.95rem; }
+  .mflank .steps p { font-size: 0.82rem; line-height: 1.45; }
+  .mflank .steps .who { font-size: 0.68rem; letter-spacing: 0.05em; }
+}
 .steps .who { font: 500 0.76rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--pad-red); }
 .steps p { color: var(--muted); font-size: 0.95rem; }
 .levels { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 6px; font-size: 0.9rem; }
@@ -179,10 +230,20 @@ figure { margin: 0; }
 
 /* ---------- stage (demos) ---------- */
 .stage { background: var(--stage); color: var(--stage-ink); }
+/* alternating section backgrounds: grey, white, grey, white ... */
+#method, #results { background: var(--surface); }
+#demos { background: var(--bg); --stage: var(--bg); --stage-2: #FFFFFF; }
+/* side-to-side gradients; the edge between two bands stays a hard line.
+   Grey bands run darker on the left, white bands run faintly tinted on the left,
+   so the two always differ at every point across the page. */
+body { background: var(--bg) linear-gradient(90deg, #E7EAF0 0%, #F5F6F8 100%); }
+#demos { background: linear-gradient(90deg, #E7EAF0 0%, #F5F6F8 100%); }
+.stage.teaser, #method, #results { background: linear-gradient(90deg, #FAFBFD 0%, #FFFFFF 100%); }
+.wallbox.stage { background: var(--bg); --stage-2: #FFFFFF; }
 .stage .eyebrow, .stage .lede { color: var(--stage-muted); }
 .pads { display: flex; gap: 6px; }
 .pads i { width: 26px; height: 18px; border-radius: 3px; transform: skewX(-14deg); }
-.pads i:nth-child(1) { background: var(--stage-red); } .pads i:nth-child(2) { background: var(--pad-white); } .pads i:nth-child(3) { background: #2F5BE0; }
+.pads i:nth-child(1) { background: var(--stage-red); } .pads i:nth-child(2) { background: #FFFFFF; box-shadow: inset 0 0 0 1px #B9BEC6; } .pads i:nth-child(3) { background: #2F5BE0; }
 
 .tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; margin-bottom: 28px; scrollbar-width: none; border-bottom: 1px solid var(--stage-line); }
 .tabs button {
@@ -208,7 +269,7 @@ figure { margin: 0; }
 .slot .frames img.on { opacity: 1; }
 .slot .empty {
   position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 10px; text-align: center; padding: 16px;
-  background: repeating-linear-gradient(135deg, transparent 0 14px, rgba(255,255,255,0.025) 14px 28px);
+  background: repeating-linear-gradient(135deg, transparent 0 14px, rgba(0,0,0,0.035) 14px 28px);
 }
 .slot .empty svg { width: 34px; height: 34px; fill: none; stroke: var(--stage-muted); stroke-width: 1.5; }
 .slot .empty code { font: 400 0.76rem var(--mono); color: var(--stage-muted); word-break: break-all; }
@@ -225,6 +286,26 @@ figure { margin: 0; }
 .kv b { color: var(--stage-ink); font-weight: 500; font-variant-numeric: tabular-nums; }
 .renamed { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font: 400 0.84rem var(--mono); }
 .renamed s { color: var(--stage-muted); }
+/* run summary above the top video, drawn like the Results charts:
+   section label with a red tick, small mono figures, blue = done by the robot, grey = human */
+.runhd { margin-bottom: 20px; }
+.runhd > .eyebrow { display: flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 600; line-height: 1.3; color: var(--ink); }
+.runhd > .eyebrow::before { content: ""; flex: none; width: 28px; height: 3px; border-radius: 2px; background: var(--pad-red); }
+.runhd h2 { margin-top: 14px; }
+.runstats { display: flex; flex-wrap: wrap; gap: 6px 28px; margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--ink); }
+.runstats > div { display: flex; align-items: baseline; gap: 8px; }
+.runstats b { font: 600 1rem var(--mono); color: var(--ink); font-variant-numeric: tabular-nums; }
+.runstats span { font: 400 0.78rem var(--mono); color: var(--muted); }
+.runlog { margin-top: 12px; }
+.runlog .cells { display: grid; grid-template-columns: repeat(25, minmax(0, 1fr)); gap: 2px; border-radius: 4px; overflow: hidden; }
+.runlog i { display: block; height: 22px; background: var(--pad-blue); }
+.runlog i.x { background: var(--human); }
+.anim .runlog .cells i { opacity: 0; transform: scaleY(0.35); }
+.anim.play .runlog .cells i { opacity: 1; transform: none; transition: opacity .25s ease calc(var(--i) * 70ms), transform .35s cubic-bezier(.3,.6,.2,1) calc(var(--i) * 70ms); }
+.runlog .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 10px; font-size: 0.84rem; color: var(--muted); }
+.runlog .legend span { display: flex; align-items: center; gap: 7px; }
+.runlog .legend i { width: 10px; height: 10px; border-radius: 2px; }
+.runlog .legend span:last-child { margin-left: auto; font: 400 0.78rem var(--mono); }
 .teaser .slot { border-radius: 12px; }
 
 /* contact sheet of paper frames, shown at their native size instead of upscaled */
@@ -235,7 +316,15 @@ figure { margin: 0; }
 .sheet .cell code { word-break: break-all; }
 
 /* video wall under the teaser */
-.wall { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 32px; }
+.wallbox { margin: 0 0 40px; padding: 22px 24px 24px; border-radius: 14px; }
+.wallbox .wallhd { margin-top: 0; }
+.wallhd { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 16px; margin-top: 36px; color: var(--stage-ink); }
+.wallhd b { font: 600 1.05rem var(--display); }
+.wallhd span { font: 400 0.78rem var(--mono); color: var(--stage-muted); }
+.wall { display: grid; grid-template-columns: repeat(var(--n, 5), minmax(0, 1fr)); grid-auto-flow: column; gap: 10px; margin-top: 14px; }
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 720px) { .pair { grid-template-columns: minmax(0, 1fr); } }
+#ood { grid-auto-flow: row; }
 .wall a { display: block; text-decoration: none; color: inherit; }
 .wall .slot { border-radius: 6px; }
 .wall .slot .empty code, .wall .slot .pending { display: none; }
@@ -250,8 +339,6 @@ figure { margin: 0; }
 .seg button[aria-pressed="true"] { background: var(--stage-ink); color: var(--stage); }
 
 /* method clips */
-.mclips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 32px; }
-.mclips figcaption { margin-top: 10px; }
 
 /* preview list (left) + player (right) */
 .md { display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 28px; align-items: start; }
@@ -275,13 +362,10 @@ figure { margin: 0; }
 .detail .card h3 { font-size: 1.5rem; }
 @media (max-width: 860px) {
   .md { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-  .wall { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .mclips { grid-template-columns: minmax(0, 1fr); }
-  .plist { grid-auto-flow: column; grid-auto-columns: 148px; overflow-x: auto; padding-bottom: 6px; }
+  .wall { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: none; grid-auto-flow: row; }
+    .plist { grid-auto-flow: column; grid-auto-columns: 148px; overflow-x: auto; padding-bottom: 6px; }
   .pv { grid-template-columns: minmax(0, 1fr); align-content: start; gap: 8px; }
 }
-.ticker { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-top: 16px; min-height: 3.6em; }
-.ticker .eyebrow { flex: none; }
 
 /* ---------- results ---------- */
 .glance { display: grid; gap: 0; border-top: 1px solid var(--ink); }
@@ -302,6 +386,63 @@ figure { margin: 0; }
 .axis { display: flex; justify-content: space-between; font: 400 0.72rem var(--mono); color: var(--muted); margin-right: 60px; }
 .keyline { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 14px; }
 
+/* ---------- animated charts: each plays when scrolled into view ---------- */
+.anim .bar, .anim .split { clip-path: inset(0 100% 0 0); }
+.anim.play .bar { clip-path: inset(0 0 0 0); transition: clip-path 1.5s cubic-bezier(.3,.6,.2,1); }
+.anim.play .split { clip-path: inset(0 0 0 0); transition: clip-path var(--t, 1.3s) cubic-bezier(.3,.6,.2,1) var(--d, 0s); }
+.anim .splitcap { opacity: 0; }
+.anim.play .splitcap { opacity: 1; transition: opacity .4s ease calc(var(--d, 0s) + var(--t, 1.3s) - 0.2s); }
+.anim:not(.play) .ruler .to { width: 0 !important; }
+.anim:not(.play) .ruler .dot { left: 0 !important; }
+.anim.play .ruler .to { transition: width var(--t, 1.3s) cubic-bezier(.3,.6,.2,1) var(--d, 0s); }
+.anim.play .ruler .dot { transition: left var(--t, 1.3s) cubic-bezier(.3,.6,.2,1) var(--d, 0s); }
+.replay { font: 500 0.74rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; cursor: pointer; }
+.replay:hover { color: var(--ink); border-color: var(--ink); }
+.replay:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.scenes { margin-bottom: 22px; }
+.sgrid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 22px; margin-bottom: 16px; }
+.scene .dots { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; max-width: 150px; }
+.dots i { aspect-ratio: 1; border-radius: 3px; background: var(--line); }
+.anim.play .dots i { transition: background-color .22s ease calc(var(--i) * 38ms); }
+.anim.play .dots i.fp { background: var(--pad-blue); }
+.anim.play .dots i.rt { background: var(--pad-red); }
+.anim.play .dots i.hu { background: var(--human); }
+.scene .nm { font-weight: 600; margin-top: 12px; font-size: 0.95rem; }
+.scene .ct { font: 400 0.78rem var(--mono); color: var(--muted); margin-top: 2px; }
+
+.strips { display: grid; gap: 9px; align-content: start; }
+.strips .gh { font: 500 0.74rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: space-between; margin-top: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+.strips .gh:first-child { margin-top: 0; }
+.strip { display: grid; grid-template-columns: 124px minmax(0, 1fr) 44px; gap: 14px; align-items: center; font-size: 0.92rem; }
+.strip .lb small { display: block; font: 400 0.74rem var(--mono); color: var(--muted); }
+.strip.ours .lb { font-weight: 600; color: var(--pad-red); }
+.strip .dots { display: grid; grid-template-columns: repeat(var(--n), minmax(0, var(--sz, 1fr))); gap: 3px; }
+.strip .dots i { border-radius: 2px; }
+.strip b { font: 600 0.92rem var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
+details.more { margin-top: 16px; }
+details.more summary { font: 500 0.74rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); cursor: pointer; width: fit-content; padding: 6px 0; }
+details.more summary:hover { color: var(--ink); }
+details.more[open] summary { margin-bottom: 10px; }
+
+.abars { display: grid; gap: 10px; margin-bottom: 18px; }
+.abar { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr) 46px; gap: 16px; align-items: center; font-size: 0.92rem; }
+.abar.ours .lb { font-weight: 600; color: var(--pad-red); }
+.abar .tr { height: 14px; background: color-mix(in srgb, var(--line) 55%, transparent); border-radius: 3px; overflow: hidden; }
+.abar .fl { display: block; height: 100%; width: 0; background: var(--human); border-radius: 3px; }
+.abar.ours .fl { background: var(--ink); }
+.anim.play .abar .fl { width: var(--w); transition: width 1s cubic-bezier(.3,.6,.2,1) calc(var(--i) * 140ms); }
+.abar b { font: 600 0.92rem var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
+.abars .cap { font: 500 0.74rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: space-between; margin: 0 62px 0 236px; }
+@media (max-width: 720px) {
+  .sgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .abar { grid-template-columns: minmax(0, 1fr) 46px; gap: 4px 12px; }
+  .abar .lb { grid-column: 1 / -1; }
+  .strip { grid-template-columns: minmax(0, 1fr) 44px; gap: 4px 12px; }
+  .strip .lb { grid-column: 1 / -1; }
+  .abars .cap { margin: 0 58px 0 0; }
+}
+
 .tablebox { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
 table { border-collapse: collapse; width: 100%; font-size: 0.88rem; font-variant-numeric: tabular-nums; }
 th, td { padding: 9px 12px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--line); }
@@ -314,6 +455,13 @@ tr.ours td:first-child { color: var(--pad-red); }
 td.l, th.l { text-align: left; }
 td.g { border-left: 1px solid var(--line); }
 .sub-h { margin: 56px 0 8px; }
+/* Results subsections: inset panels, alternating light grey and white, so they read as
+   parts of one section rather than as new page-wide bands */
+.rpanel { margin-top: 28px; padding: 30px 32px 34px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface); }
+.rpanel.tint { background: var(--bg); border-color: transparent; }
+.rpanel > .sub-h { margin-top: 0; }
+.keyline + .rpanel { margin-top: 56px; }
+@media (max-width: 720px) { .rpanel { padding: 22px 16px 24px; border-radius: 12px; } }
 .sub-p { color: var(--muted); max-width: 70ch; margin-bottom: 20px; font-size: 0.96rem; }
 .ptabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
 .ptabs button { font: 500 0.88rem var(--body); padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; }
@@ -334,9 +482,10 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: s
   section { padding-block: 52px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .loop .boulder { animation: none; }
+  .hloop .boulder { animation: none; }
   html { scroll-behavior: auto; }
   .slot .frames img { transition: none; }
+  .anim *, .anim.play * { transition: none !important; }
 }
 </style>
 </head>
@@ -365,22 +514,38 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: s
 
 <!-- ================= HERO ================= -->
 <div class="hero wrap">
-  <p class="eyebrow">CVPR 2027 submission · Anonymous authors</p>
-  <h1>Sisyphus<br>never <em>stops</em>.</h1>
   <div class="hero-grid">
     <div>
+      <h1>Sisyphus<br>never <em>stops</em>.</h1>
       <p class="sub">Task-agnostic object reset toward unattended real-robot manipulation</p>
+      <p class="eyebrow" style="margin-top:14px">Anonymous authors</p>
       <p class="lede">Every real-robot trial leaves objects out of place, and a person has to put them back. Sisyphus does it instead: an MLLM decides which object goes where and describes it by colour, shape and position, and Outis-VLA, trained only on blocks, moves it.</p>
       <p class="lede" style="margin-top:12px">On five held-out block scenes it needs 1.29 attempts per object, against 2.95 for the strongest baseline.</p>
       <div class="actions">
         <a class="btn primary" href="#demos">Watch the demos</a>
+        <a class="btn" href="#idea">Idea</a>
+        <a class="btn" href="#method">Method</a>
         <a class="btn" href="#results">Results</a>
       </div>
     </div>
+    <div class="hero-side">
+    <figure class="hloop" id="loop" aria-label="Schematic: a trial moves three blocks off their pads, then Sisyphus returns them one at a time, and the next trial starts.">
+      <div class="hloop-hd"><span><b class="lt">Trial <i id="loop-n">1</i></b><b class="lr">Reset</b></span><span>schematic</span></div>
+      <svg viewBox="0 0 300 232" role="presentation" focusable="false">
+        <rect class="tbl" x="1" y="1" width="298" height="230" rx="12"/>
+        <rect class="pad p1" x="24" y="15" width="56" height="56" rx="7"/>
+        <rect class="pad p2" x="24" y="88" width="56" height="56" rx="7"/>
+        <rect class="pad p3" x="24" y="161" width="56" height="56" rx="7"/>
+        <rect class="blk b1" x="32" y="23" width="40" height="40" rx="5"/>
+        <rect class="blk b2" x="32" y="96" width="40" height="40" rx="5"/>
+        <rect class="blk b3" x="32" y="169" width="40" height="40" rx="5"/>
+      </svg>
+    </figure>
     <blockquote class="quote" style="margin:0">
       <b>“One must imagine Sisyphus happy.”</b>
       Albert Camus, <cite>The Myth of Sisyphus</cite>. Sisyphus had gravity to roll his boulder back down for free. In the lab, a human carries it.
     </blockquote>
+    </div>
   </div>
 
 </div>
@@ -388,12 +553,23 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: s
 <!-- ================= TEASER (stage) ================= -->
 <div class="stage teaser">
   <div class="wrap" style="padding-block:40px 44px">
-    <div class="slot" data-video="assets/videos/teaser.mp4" data-tag="Teaser · real robot"></div>
-    <div class="ticker">
-      <span class="eyebrow">What the policy is told</span>
-      <span class="instr" id="ticker" aria-live="off"></span>
+    <div class="runhd">
+      <p class="eyebrow">Unattended operation · Twin-Tower</p>
+      <h2>25 resets in a row, over 2 hours.</h2>
+      <div class="runstats">
+        <div><b class="num">25</b><span>consecutive resets</span></div>
+        <div><b class="num">2.0 h</b><span>one session</span></div>
+        <div><b class="num">22 / 25</b><span>reset without help (88%)</span></div>
+        <div><b class="num">10</b><span>first round that needed a person</span></div>
+      </div>
+      <div class="runlog" aria-label="Result of each of the 25 rounds">
+        <div class="cells"><i class="ok" title="Round 1: reset without help"></i><i class="ok" title="Round 2: reset without help"></i><i class="ok" title="Round 3: reset without help"></i><i class="ok" title="Round 4: reset without help"></i><i class="ok" title="Round 5: reset without help"></i><i class="ok" title="Round 6: reset without help"></i><i class="ok" title="Round 7: reset without help"></i><i class="ok" title="Round 8: reset without help"></i><i class="ok" title="Round 9: reset without help"></i><i class="x" title="Round 10: needed a person"></i><i class="ok" title="Round 11: reset without help"></i><i class="ok" title="Round 12: reset without help"></i><i class="ok" title="Round 13: reset without help"></i><i class="ok" title="Round 14: reset without help"></i><i class="ok" title="Round 15: reset without help"></i><i class="ok" title="Round 16: reset without help"></i><i class="ok" title="Round 17: reset without help"></i><i class="ok" title="Round 18: reset without help"></i><i class="ok" title="Round 19: reset without help"></i><i class="ok" title="Round 20: reset without help"></i><i class="ok" title="Round 21: reset without help"></i><i class="ok" title="Round 22: reset without help"></i><i class="x" title="Round 23: needed a person"></i><i class="x" title="Round 24: needed a person"></i><i class="ok" title="Round 25: reset without help"></i></div>
+        <div class="legend"><span><i class="ok"></i>reset without help</span><span><i class="x"></i>needed a person</span><span>round 1 → 25</span></div>
+      </div>
     </div>
-    <div class="wall" id="wall" aria-label="More clips"></div>
+    <div class="slot" data-video="assets/videos/teaser.mp4" data-tag="25 consecutive resets · time-lapse"></div>
+    <div class="wallhd"><b>Trained on blocks. Resets objects it has never seen.</b><span id="ood-n"></span></div>
+    <div class="wall" id="ood" aria-label="Unseen-object clips"></div>
   </div>
 </div>
 
@@ -402,7 +578,10 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: s
   <div class="wrap">
     <div class="head">
       <p class="eyebrow">Key observation</p>
-      <h2>Reset is mostly pick-and-place, and a name only says <em style="font-style:normal;color:var(--pad-red)">which</em> object, not <em style="font-style:normal;color:var(--pad-blue)">how</em>.</h2>
+      <figure style="margin:10px 0 18px">
+        <div class="plate"><img src="assets/img/fig1_teaser.png" alt="Outis-VLA is trained on atomic pick-and-place data with blocks; for unseen tasks the MLLM plans which object returns to which region; motions beyond pick-and-place use per-motion data; Sisyphus resets the scene after each trial." width="1566" height="529" loading="lazy"></div>
+      </figure>
+      <h2>A reset takes only a few kinds of motion, and a name says <em style="font-style:normal;color:var(--pad-red)">which</em> object, not <em style="font-style:normal;color:var(--pad-blue)">how</em>.</h2>
     </div>
     <div class="two">
       <div class="prose">
@@ -411,7 +590,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: s
         <p>Sisyphus separates the roles. The MLLM never names an object. An unseen soda can reaches the policy as a new combination of attribute values it already knows:</p>
         <p class="instr on-paper" id="idea-instr"></p>
       </div>
-      <figure class="cover">
+      <figure class="cover" id="mix">
         <p class="eyebrow">Hardest motion a task's reset needs · 150 benchmark tasks</p>
         <div class="bar" role="img" aria-label="Pick-and-place 78.0 percent, extraction 6.7, articulated 8.7, no reset needed 3.3, insertion 1.3, irreversible 1.3, deformable 0.7">
           <span class="c-pp" style="flex:78">P&amp;P 78.0%</span>
@@ -436,48 +615,55 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: s
       </figure>
     </div>
 
-    <figure style="margin-top:56px">
-      <div class="plate"><img src="assets/img/fig1_teaser.png" alt="Outis-VLA is trained on atomic pick-and-place data with blocks; for unseen tasks the MLLM plans which object returns to which region; motions beyond pick-and-place use per-motion data; Sisyphus resets the scene after each trial." width="1566" height="529" loading="lazy"></div>
-      <figcaption>Outis-VLA is trained once on block pick-and-place demonstrations that cover combinations of attribute values. For an unseen task the MLLM plans which object returns to which region. Motions beyond pick-and-place, such as extraction, use per-motion data.</figcaption>
-    </figure>
   </div>
 </section>
 
 <!-- ================= METHOD ================= -->
-<section id="method" style="padding-top:0">
+<section id="method">
   <div class="wrap">
     <div class="head">
       <p class="eyebrow">Method</p>
-      <h2>The MLLM decides what and where. Outis-VLA decides how. A closed loop catches what goes wrong.</h2>
+      <h2>The MLLM decides what and where. <span style="white-space:nowrap">Outis-VLA</span>, trained only on blocks, decides how. A closed loop catches what goes wrong.</h2>
     </div>
+    <div class="mflank">
     <figure>
-      <div class="plate"><img src="assets/img/fig2_overview.png" alt="Overview: the frozen MLLM grounds and plans attribute instructions, Outis-VLA executes them, and a hierarchical closed loop retries at action, attempt and scene level." width="1626" height="595" loading="lazy"></div>
+      <div class="plate walk" id="walk"><img src="assets/img/fig2_overview.png" alt="Overview: the frozen MLLM grounds and plans attribute instructions, Outis-VLA executes them, and a hierarchical closed loop retries at action, attempt and scene level." width="1626" height="595" loading="lazy"><span class="spot" aria-hidden="true"></span></div>
+      <div class="walknav" id="walk-nav" role="group" aria-label="Figure steps"></div>
+      <figcaption id="walk-cap" class="walkcap">Top: one reset, step by step. Bottom: how Outis-VLA is trained and why it transfers to unseen objects.</figcaption>
     </figure>
-    <div class="steps">
+    <div class="steps" id="steps">
       <div>
         <span class="who">Frozen MLLM</span>
         <h3>Select, ground, describe</h3>
-        <p>Picks an object that is not yet in place and a free region, grounds both as pixels, refines the pixel on a zoomed crop, and lifts it to 3D with the depth map. Then it writes the instruction from a closed vocabulary of attributes and motion words.</p>
+        <p>Picks an out-of-place object and a free region, grounds both in 3D, and writes an attribute instruction.</p>
       </div>
       <div>
         <span class="who">Outis-VLA</span>
         <h3>Execute, with a noise search</h3>
-        <p>A π<sub>0.5</sub> policy post-trained on attribute instructions. At each query it draws five initial noises and runs the chunk whose planned endpoint lands closest to the grounded target. No reward model and no fine-tuning.</p>
+        <p>A π<sub>0.5</sub> policy post-trained on attribute instructions. Of five sampled noises it runs the one that ends closest to the target.</p>
       </div>
       <div>
         <span class="who">Closed loop</span>
         <h3>Check at three levels</h3>
-        <ul class="levels">
-          <li><b>Action</b> Finger gap shows a wrong grasp, so abort before lifting.</li>
-          <li><b>Attempt</b> MLLM re-locates the object and verifies it is in the region.</li>
-          <li><b>Scene</b> Memory of placed objects detects and repairs knock-outs.</li>
-        </ul>
+        <p>Action: abort a wrong grasp. Attempt: verify the placement. Scene: repair knocked-out objects.</p>
+      </div>
+      <div>
+        <span class="who">Training data</span>
+        <h3>Blocks only</h3>
+        <p>Pick-and-place is learned from block scenes alone.</p>
+      </div>
+      <div>
+        <span class="who">Semantics-decoupled learning</span>
+        <h3>Attributes, not names</h3>
+        <p>Instructions give colour, shape and position, never the object's name.</p>
+      </div>
+      <div>
+        <span class="who">Task-agnostic inference</span>
+        <h3>Unseen objects, same words</h3>
+        <p>The same attribute words describe a mug or a can, so the policy resets objects it has never seen.</p>
       </div>
     </div>
-    <div class="mclips">
-      <figure><div class="slot" data-video="assets/videos/method_grounding.mp4" data-tag="MLLM view"></div><figcaption>What the MLLM sees: the pixel it returns for each object and region, and the refinement on a zoomed crop.</figcaption></figure>
-      <figure><div class="slot" data-video="assets/videos/method_noise_search.mp4" data-tag="Noise search"></div><figcaption>Five candidate chunks from five initial noises. The one whose endpoint lands closest to the target is executed.</figcaption></figure>
-      <figure><div class="slot" data-video="assets/videos/method_closed_loop.mp4" data-tag="Closed loop"></div><figcaption>One reset with the loop's decisions overlaid: grasp check, verification, scene memory.</figcaption></figure>
+    </div>
     </div>
   </div>
 </section>
@@ -486,7 +672,6 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: s
 <section id="demos" class="stage">
   <div class="wrap">
     <div class="head">
-      <div class="pads" aria-hidden="true"><i></i><i></i><i></i></div>
       <p class="eyebrow">Real-robot demos · 6-DoF YAM arm, one fixed RGB-D camera, one wrist camera</p>
       <h2>On the table</h2>
       <p class="lede">Each video starts from the scene a trial left behind.</p>
@@ -505,6 +690,10 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: s
       <p class="lede">Tries-to-Reset (TTR) is the mean number of attempts per object. Attempts are capped at three, and a reset that needs a human is charged the full cap, so TTR runs from 1 (everything placed first try) to 3 (a human finished every reset).</p>
     </div>
 
+    <figure class="wallbox stage">
+      <div class="wallhd"><b>Sisyphus-Bench: five block scenes it never trained on</b><span>one reset per scene · 5 clips</span></div>
+      <div class="wall" id="wall" aria-label="Block-scene clips"></div>
+    </figure>
     <div class="glance" id="glance">
       <div class="row hd"><span>Method</span><span>125 block-scene resets completed by</span><span>TTR · lower is better</span></div>
     </div>
@@ -513,10 +702,18 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: s
       <li><i class="c-pp"></i>First pass</li>
       <li><i class="c-ex"></i>Retry</li>
       <li><i style="background:var(--human)"></i>Human</li>
+      <li style="margin-left:auto"><button type="button" class="replay" data-replay="glance">Replay</button></li>
     </ul>
 
+    <div class="rpanel tint">
     <h3 class="sub-h">Block scenes, per scene</h3>
-    <p class="sub-p">Three blocks must each return to their own coloured region. 25 resets per scene. Sisyphus uses no demonstrations from these scenes. SR: first-pass success (%). Time: seconds per reset. Int.: resets that needed a human.</p>
+    <p class="sub-p">Three blocks must each return to their own coloured region. 25 resets per scene. Sisyphus uses no demonstrations from these scenes. Each square is one reset, grouped by how it ended. SR: first-pass success (%). Time: seconds per reset. Int.: resets that needed a human.</p>
+    <div class="scenes" id="scenes">
+      <div class="ptabs" role="tablist" aria-label="Method" id="scene-tabs"></div>
+      <div class="sgrid" id="scene-grid" role="tabpanel" tabindex="0"></div>
+      <button type="button" class="replay" data-replay="scenes">Replay</button>
+    </div>
+    <details class="more"><summary>Full table: SR, time, interventions</summary>
     <div class="tablebox">
       <table>
         <thead>
@@ -531,10 +728,18 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: s
         </tbody>
       </table>
     </div>
+    </details>
     <p class="takeaway">MP Skill shares Sisyphus's MLLM, goal specification and closed loop and differs only in the executor, so the gap lies in how a decision is turned into motion. The baselines' shorter times come from resets that stop early for a human.</p>
+    </div>
 
+    <div class="rpanel">
     <h3 class="sub-h">Extraction and unseen objects</h3>
-    <p class="sub-p">Outis-VLA has only ever extracted an HDMI connector, and has only ever picked up blocks.</p>
+    <p class="sub-p">Outis-VLA has only ever extracted an HDMI connector, and has only ever picked up blocks. Each square is one reset, grouped by how it ended: 25 per extraction task, 5 per everyday object.</p>
+    <div class="two" id="xo" style="gap:44px">
+      <div class="strips" id="x-strips"></div>
+      <div class="strips" id="o-strips"></div>
+    </div>
+    <details class="more"><summary>Full tables</summary>
     <div class="two" style="gap:24px">
       <div class="tablebox">
         <table>
@@ -563,11 +768,15 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: s
         </table>
       </div>
     </div>
+    </details>
+    </div>
 
+    <div class="rpanel tint">
     <h3 class="sub-h">What each part contributes</h3>
     <p class="sub-p">Ablations on the block scenes. They use smaller subsets, so the full model's numbers differ slightly from the main table.</p>
     <div class="ptabs" role="tablist" aria-label="Ablations" id="abl-tabs"></div>
     <div id="abl-panel" role="tabpanel" tabindex="0"></div>
+    </div>
   </div>
 </section>
 
@@ -575,7 +784,6 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: s
 
 <footer>
   <div class="wrap">
-    <span>Anonymous project page for double-blind review. No author or affiliation information is shown.</span>
     <span>Sisyphus · Outis-VLA · Sisyphus-Bench</span>
   </div>
 </footer>
@@ -616,10 +824,28 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: s
   }, { threshold: 0.35 }) : null;
 
   var timers = [], rate = 1;
+  /* Videos that are in assets/videos. These get the player straight away, with a
+     poster frame from assets/videos/posters/, instead of waiting behind a placeholder.
+     Add a file name here when you add a video. */
+  var HAVE = {"teaser.mp4": 1, "extract_drawer.mp4": 1, "unseen_rice_ball.mp4": 1, "unseen_clear_bottle.mp4": 1, "unseen_gear.mp4": 1, "blocks_bridge.mp4": 1, "blocks_side_by_side.mp4": 1, "blocks_three_pillars.mp4": 1, "blocks_totem.mp4": 1, "blocks_twin_tower.mp4": 1, "extract_hdmi_blue.mp4": 1, "extract_hdmi_blue_run2.mp4": 1, "extract_hdmi_red.mp4": 1, "extract_hdmi_red_run2.mp4": 1, "extract_test_tube.mp4": 1, "extract_usb_blue.mp4": 1, "extract_usb_blue_run2.mp4": 1, "extract_usb_red.mp4": 1, "extract_usb_red_run2.mp4": 1, "unseen_mug.mp4": 1, "unseen_packaged_bread.mp4": 1, "unseen_soda_can.mp4": 1, "unseen_soft_pack_drink.mp4": 1};
+  function hasVideo(src) { return !!HAVE[String(src).split("#")[0].split("/").pop()]; }
+  function posterOf(src) { return String(src).split("#")[0].replace(/([^/]+)\.mp4$/, "posters/$1.jpg"); }
   function mountSlot(el) {
     var src = el.dataset.video, frames = (el.dataset.frames || "").split(",").filter(Boolean);
     var html = "";
     if (el.dataset.tag) html += '<span class="tag' + (el.dataset.ours ? " ours" : "") + '">' + esc(el.dataset.tag) + "</span>";
+    if (hasVideo(src)) {
+      el.innerHTML = html;
+      var pv = document.createElement("video");
+      pv.muted = true; pv.loop = true; pv.playsInline = true; pv.controls = !el.dataset.bare;
+      pv.preload = el.dataset.bare ? "metadata" : "auto"; pv.poster = posterOf(src);
+      pv.src = src; pv.playbackRate = el.dataset.bare ? 1 : rate;
+      pv.addEventListener("loadedmetadata", function () { pv.playbackRate = el.dataset.bare ? 1 : rate; });
+      el.appendChild(pv);
+      if (el.dataset.to) { pv.loop = false; pv.preload = "auto"; return; } /* driven by the synced strip */
+      if (playObserver && !reduce) playObserver.observe(pv);
+      return;
+    }
     if (frames.length && el.dataset.sheet) {
       html += '<div class="sheet">' + frames.map(function (f) { return '<img src="' + esc(f) + '" alt="">'; }).join("") +
         '<span class="cell"><b>Frames from the paper</b><code>' + esc(src) + "</code></span></div>";
@@ -631,89 +857,185 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: s
     el.innerHTML = html;
     var v = document.createElement("video");
     v.muted = true; v.loop = true; v.playsInline = true; v.controls = !el.dataset.bare; v.preload = "metadata";
-    v.addEventListener("loadeddata", function () {
+    /* Safari with preload="metadata" may never fire loadeddata, so show the video on whichever comes first */
+    var shown = false;
+    function ready() {
+      if (shown) return; shown = true;
       v.playbackRate = el.dataset.bare ? 1 : rate;
       el.querySelectorAll(".empty, .frames, .sheet, .pending").forEach(function (n) { n.remove(); });
       el.appendChild(v);
       if (playObserver && !reduce) playObserver.observe(v);
-    });
+    }
+    v.addEventListener("loadedmetadata", ready);
+    v.addEventListener("loadeddata", ready);
     v.src = src;
   }
 
   /* Small preview in the left list: paper frame or placeholder until the mp4
      exists, then the video's own first frame, which plays on hover. */
   function mountThumb(el, btn) {
+    if (hasVideo(el.dataset.video)) {
+      el.innerHTML = "";
+      var tv = document.createElement("video");
+      tv.muted = true; tv.loop = true; tv.playsInline = true; tv.preload = "metadata";
+      tv.poster = posterOf(el.dataset.video); tv.src = el.dataset.video;
+      el.appendChild(tv);
+      if (!reduce) {
+        btn.addEventListener("mouseenter", function () { var p = tv.play(); if (p && p.catch) p.catch(function () {}); });
+        btn.addEventListener("mouseleave", function () { tv.pause(); });
+      }
+      return;
+    }
     el.innerHTML = el.dataset.frame
       ? '<img src="' + esc(el.dataset.frame) + '" alt="">'
       : '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M10 8.5v7l6-3.5z"/></svg>';
     var v = document.createElement("video");
     v.muted = true; v.loop = true; v.playsInline = true; v.preload = "metadata";
-    v.addEventListener("loadeddata", function () {
+    var shownT = false;
+    function readyT() {
+      if (shownT) return; shownT = true;
       el.innerHTML = ""; el.appendChild(v);
       if (reduce) return;
       btn.addEventListener("mouseenter", function () { var p = v.play(); if (p && p.catch) p.catch(function () {}); });
       btn.addEventListener("mouseleave", function () { v.pause(); });
-    });
+    }
+    v.addEventListener("loadedmetadata", readyT);
+    v.addEventListener("loadeddata", readyT);
     v.src = el.dataset.video + "#t=0.5";
   }
 
   /* ---------- demo data ---------- */
   var F = function (row) { return [0, 1, 2, 3, 4].map(function (i) { return "assets/img/roll_" + row + "_" + i + ".jpg"; }).join(","); };
   var DEMOS = [
-    { id: "blocks", label: "Block scenes", note: "Five held-out scenes, each named after the structure the trial built. Three blocks return to their own coloured regions. None of these structures or layouts appear in the training data.",
-      items: [
-        { t: "Side-by-Side", v: "blocks_side_by_side.mp4", runs: 3, wrist: true, kv: [["SR", "80.0%"], ["Time", "189.8 s"], ["Human", "5 / 25"]] },
-        { t: "Twin-Tower", v: "blocks_twin_tower.mp4", runs: 3, wrist: true, kv: [["SR", "84.0%"], ["Time", "200.0 s"], ["Human", "4 / 25"]] },
-        { t: "Three-Pillars", v: "blocks_three_pillars.mp4", runs: 3, wrist: true, kv: [["SR", "88.0%"], ["Time", "163.6 s"], ["Human", "3 / 25"]] },
-        { t: "Bridge", v: "blocks_bridge.mp4", runs: 3, wrist: true, kv: [["SR", "92.0%"], ["Time", "170.9 s"], ["Human", "2 / 25"]] },
-        { t: "Totem", v: "blocks_totem.mp4", runs: 3, wrist: true, kv: [["SR", "80.0%"], ["Time", "184.6 s"], ["Human", "4 / 25"]] }
-      ] },
     { id: "unseen", label: "Unseen objects", note: "Everyday objects whose categories are absent from Outis-VLA's training data. The MLLM names each one only by a colour and a shape the policy has grounded on blocks.",
       items: [
-        { t: "Soda can", v: "unseen_soda_can.mp4", runs: 2, wrist: true, frames: F(0), was: "soda can", as: [["c", "red"], ["s", "cylinder"]], kv: [["SR", "60.0%"], ["TTR", "1.80"]] },
-        { t: "Mug", v: "unseen_mug.mp4", runs: 2, wrist: true, frames: F(1), was: "mug", as: [["c", "blue"], ["s", "cylinder"]], kv: [["SR", "100%"], ["TTR", "1.00"]] },
-        { t: "Soft-pack drink", v: "unseen_soft_pack_drink.mp4", runs: 2, wrist: true, was: "drink", as: [["c", "purple"], ["s", "bar"]], kv: [["SR", "100%"], ["TTR", "1.00"]] },
-        { t: "Rice ball", v: "unseen_rice_ball.mp4", runs: 2, wrist: true, was: "rice ball", as: [["c", "blue"], ["s", "triangle"]], kv: [["SR", "80.0%"], ["TTR", "1.40"]] },
-        { t: "Packaged bread", v: "unseen_packaged_bread.mp4", runs: 2, wrist: true, was: "bread", as: [["c", "blue"], ["s", "bar"]], kv: [["SR", "60.0%"], ["TTR", "1.80"]] }
+        { t: "Soda can", v: "unseen_soda_can.mp4", frames: F(0), was: "soda can", as: [["c", "red"], ["s", "cylinder"]], kv: [["SR", "60.0%"], ["TTR", "1.80"]] },
+        { t: "Mug", v: "unseen_mug.mp4", frames: F(1), was: "mug", as: [["c", "blue"], ["s", "cylinder"]], kv: [["SR", "100%"], ["TTR", "1.00"]] },
+        { t: "Soft-pack drink", v: "unseen_soft_pack_drink.mp4", was: "drink", as: [["c", "purple"], ["s", "bar"]], kv: [["SR", "100%"], ["TTR", "1.00"]] },
+        { t: "Rice ball", v: "unseen_rice_ball.mp4", was: "rice ball", as: [["c", "blue"], ["s", "triangle"]], kv: [["SR", "80.0%"], ["TTR", "1.40"]] },
+        { t: "Packaged bread", v: "unseen_packaged_bread.mp4", was: "bread", as: [["c", "blue"], ["s", "bar"]], kv: [["SR", "60.0%"], ["TTR", "1.80"]] },
+        { t: "Transparent bottle", v: "unseen_clear_bottle.mp4" },
+        { t: "Gear", v: "unseen_gear.mp4" }
       ] },
-    { id: "extract", label: "Extraction", note: "Extraction is learned from demonstrations on an HDMI connector only. Neither the USB stick nor the test tube is ever extracted in training.",
+    { id: "blocks", label: "P&P", note: "Five held-out scenes, each named after the structure the trial built. Three blocks return to their own coloured regions. None of these structures or layouts appear in the training data.",
       items: [
-        { t: "USB stick from a hub", v: "extract_usb.mp4", runs: 2, wrist: true, ins: ["take the", ["c", "blue"], "object", ["a", "out of"], "the", ["c", "black"], ["a", "hub"]], kv: [["SR", "92.0%"], ["Time", "71.8 s"], ["TTR", "1.16"]] },
-        { t: "Test tube from its rack", v: "extract_test_tube.mp4", runs: 2, wrist: true, kv: [["SR", "100%"], ["Time", "70.0 s"], ["TTR", "1.00"]] },
-        { t: "Object from a drawer", v: "extract_drawer.mp4", frames: F(2), d: "The robot pulls the drawer open and takes the object out." }
+        { t: "Side-by-Side", v: "blocks_side_by_side.mp4", kv: [["SR", "80.0%"], ["Time", "189.8 s"], ["Human", "5 / 25"]] },
+        { t: "Twin-Tower", v: "blocks_twin_tower.mp4", kv: [["SR", "84.0%"], ["Time", "200.0 s"], ["Human", "4 / 25"]] },
+        { t: "Three-Pillars", v: "blocks_three_pillars.mp4", kv: [["SR", "88.0%"], ["Time", "163.6 s"], ["Human", "3 / 25"]] },
+        { t: "Bridge", v: "blocks_bridge.mp4", kv: [["SR", "92.0%"], ["Time", "170.9 s"], ["Human", "2 / 25"]] },
+        { t: "Totem", v: "blocks_totem.mp4", kv: [["SR", "80.0%"], ["Time", "184.6 s"], ["Human", "4 / 25"]] }
       ] },
-    { id: "recover", label: "Recovery", note: "Failures surface at different moments, so the loop checks at three levels. Each clip shows one level catching a failure and the reset continuing without a human.",
+    { id: "extract", label: "Extraction", note: "Extraction is learned from demonstrations on an HDMI connector only. Neither the USB stick nor the test tube is ever extracted in training. Opening a drawer, a motion beyond pick-and-place, has its own demonstrations.",
       items: [
-        { t: "Action: wrong-grasp abort", v: "recovery_wrong_grasp_abort.mp4", d: "The fingers stop on a neighbouring object. The gripper opens before lifting it." },
-        { t: "Attempt: verify and retry", v: "recovery_verify_retry.mp4", d: "The object lands off centre. The MLLM re-locates it, rejects the attempt, and the step runs again." },
-        { t: "Scene: repair a knocked-out object", v: "recovery_scene_repair.mp4", d: "A later step pushes a placed block out of its region. Scene memory notices and puts it back." }
-      ] },
-    { id: "fail", label: "Failure cases", note: "Resets that Sisyphus could not finish. After three attempts on one object the reset goes to a human, and TTR charges it the full cap.",
-      items: [
-        { t: "Packaged bread", v: "failure_packaged_bread.mp4", d: "2 of the 5 resets with this object ended in an intervention.", kv: [["SR", "60.0%"], ["TTR", "1.80"]] },
-        { t: "Soda can", v: "failure_soda_can.mp4", d: "2 of the 5 resets with this object ended in an intervention.", kv: [["SR", "60.0%"], ["TTR", "1.80"]] },
-        { t: "Block scene handed to a human", v: "failure_blocks.mp4", d: "18 of the 125 block-scene resets needed a human, at most 5 per scene." }
-      ] },
-    { id: "versus", label: "Versus baselines", four: true, note: "The same scene and start state for every method. MP Skill and HALTER query the same MLLM as Sisyphus.",
-      items: [
-        { t: "Sisyphus", v: "vs_sisyphus.mp4", ours: true, kv: [["TTR", "1.29"]] },
-        { t: "MP Skill", v: "vs_mp_skill.mp4", d: "GraspNet + cuRobo executor", kv: [["TTR", "2.95"]] },
-        { t: "HALTER", v: "vs_halter.mp4", d: "LLM-sequenced atomic VLA skills", kv: [["TTR", "3.00"]] },
-        { t: "AutoEval", v: "vs_autoeval.mp4", d: "Reset policy trained per scene", kv: [["TTR", "3.00"]] }
-      ] },
-    { id: "unattended", label: "Unattended run", wide: true, note: "A long run of consecutive trials and resets with nobody at the table.",
-      items: [ { t: "Trial, reset, trial, reset", v: "unattended_run.mp4", d: "Time-lapse of the full run." } ] }
+        { t: "Blue USB stick from a hub", v: "extract_usb_blue.mp4", runs: 2, ins: ["take the", ["c", "blue"], "object", ["a", "out of"], "the", ["c", "black"], ["a", "hub"]], kv: [["SR", "92.0%"], ["Time", "71.8 s"], ["TTR", "1.16"]] },
+        { t: "Red USB stick from a hub", v: "extract_usb_red.mp4", runs: 2, ins: ["take the", ["c", "red"], "object", ["a", "out of"], "the", ["c", "black"], ["a", "hub"]], kv: [["SR", "92.0%"], ["Time", "71.8 s"], ["TTR", "1.16"]] },
+        { t: "Blue HDMI connector from a hub", v: "extract_hdmi_blue.mp4", runs: 2, ins: ["take the", ["c", "blue"], "object", ["a", "out of"], "the", ["c", "black"], ["a", "hub"]] },
+        { t: "Red HDMI connector from a hub", v: "extract_hdmi_red.mp4", runs: 2, ins: ["take the", ["c", "red"], "object", ["a", "out of"], "the", ["c", "black"], ["a", "hub"]] },
+        { t: "Test tube from its rack", v: "extract_test_tube.mp4", kv: [["SR", "100%"], ["Time", "70.0 s"], ["TTR", "1.00"]] },
+        { t: "Object from a drawer", v: "extract_drawer.mp4", d: "A trial has put the object into the drawer. The robot pulls the drawer open and takes the object out." }
+      ] }
   ];
 
   function card(it, big) {
     var h = '<article class="card"><div class="slot" data-video="assets/videos/' + it.v + '"' +
-      (it.frames ? ' data-frames="' + it.frames + '"' : "") + (big ? ' data-sheet="1"' : "") + (it.ours ? ' data-ours="1" data-tag="Ours"' : "") + "></div><h3>" + esc(it.t) + "</h3>";
+      (it.frames ? ' data-frames="' + it.frames + '"' : "") + (it.b ? ' data-a="' + it.a + '" data-b="' + it.b + '"' : "") + (big ? ' data-sheet="1"' : "") + (it.ours ? ' data-ours="1" data-tag="Ours"' : "") + "></div><h3>" + esc(it.t) + "</h3>";
     if (it.was) h += '<div class="renamed"><s>' + esc(it.was) + "</s><span aria-hidden=\"true\">→</span><span class=\"instr\">" + instr(it.as) + "</span></div>";
     if (it.ins) h += '<p class="instr" style="line-height:1.9;font-size:0.82rem">' + instr(it.ins) + "</p>";
     if (it.d) h += '<p class="desc">' + esc(it.d) + "</p>";
     if (it.kv) h += '<div class="kv">' + it.kv.map(function (k) { return "<span>" + k[0] + " <b>" + k[1] + "</b></span>"; }).join("") + "</div>";
     return h + "</article>";
   }
+
+  /* ---------- animated charts ---------- */
+  function fire(el) { el.classList.add("play"); if (el._onplay) el._onplay(); }
+  var animObs = "IntersectionObserver" in window && !reduce ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      var el = e.target;
+      if (e.isIntersecting && e.intersectionRatio >= 0.3) { if (!el.classList.contains("play")) fire(el); }
+      else if (!e.isIntersecting && window.innerHeight > 0 && (e.boundingClientRect.bottom < 0 || e.boundingClientRect.top > window.innerHeight)) el.classList.remove("play");
+    });
+  }, { threshold: [0, 0.3] }) : null;
+  function regAnim(el, onplay) {
+    el.classList.add("anim"); el._onplay = onplay;
+    if (animObs) animObs.observe(el); else fire(el);
+  }
+  function replay(el) { el.classList.remove("play"); void el.offsetWidth; fire(el); }
+  function countUp(el, from, to, ms, delay) {
+    var tok = (el._tok = (el._tok || 0) + 1);
+    if (reduce) { el.textContent = to.toFixed(2); return; }
+    el.textContent = from.toFixed(2);
+    var t0 = performance.now() + delay;
+    (function step(now) {
+      if (el._tok !== tok) return;
+      var k = Math.min(1, Math.max(0, (now - t0) / ms)); k = 1 - Math.pow(1 - k, 3);
+      el.textContent = (from + (to - from) * k).toFixed(2);
+      if (k < 1) requestAnimationFrame(step);
+    })(performance.now());
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest("[data-replay]") : null;
+    if (b) replay(document.getElementById(b.getAttribute("data-replay")));
+  });
+  regAnim(document.getElementById("mix"));
+
+  /* ---------- Fig. 2 walk-through ---------- */
+  (function () {
+    var walk = document.getElementById("walk"), spot = walk.querySelector(".spot"), img = walk.querySelector("img");
+    var cols = document.getElementById("steps").children;
+    /* regions in image pixels (1626 x 595): x, y, w, h */
+    var R = [[52, 28, 990, 226], [1058, 48, 520, 205], [385, 236, 1020, 44], [58, 288, 582, 300], [644, 338, 252, 254], [908, 286, 664, 306]];
+    var CAP = [
+      "At reset time: the frozen MLLM grounds each object and writes one attribute instruction per move.",
+      "At reset time: Outis-VLA executes the instructions and the objects end up back in place.",
+      "At reset time: the closed loop checks every action, attempt and scene, and retries.",
+      "Training: Outis-VLA learns pick-and-place on pure block scenes.",
+      "Training: instructions use only colour, shape and position, never an object's name.",
+      "Inference: the same attributes describe everyday objects it has never seen, so the reset transfers."
+    ];
+    var cap = document.getElementById("walk-cap"), CAP0 = cap.textContent, nav = document.getElementById("walk-nav");
+    /* buttons: one per step, plus play to resume the loop */
+    var pinned = false;
+    nav.innerHTML = R.map(function (r, i) { return '<button type="button" data-i="' + i + '" aria-pressed="false" aria-label="Step ' + (i + 1) + '">' + (i + 1) + "</button>"; }).join("") +
+      '<button type="button" data-i="-1" aria-pressed="false">All</button><button type="button" data-i="play" aria-pressed="true">Auto</button>';
+    nav.addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      if (b.dataset.i === "play") { pinned = false; mark(); return; }
+      pinned = true; set(+b.dataset.i);
+    });
+    function mark() {
+      Array.prototype.forEach.call(nav.children, function (b) {
+        var v = b.dataset.i;
+        b.setAttribute("aria-pressed", v === "play" ? String(!pinned) : String(+v === cur && (pinned || v !== "-1")));
+      });
+    }
+    var cur = -1, held = false, vis = false;
+    function set(i) {
+      cur = i;
+      Array.prototype.forEach.call(cols, function (c, j) { c.classList.toggle("cur", j === i); });
+      cap.innerHTML = i < 0 ? CAP0 : '<b>' + (i + 1) + " / " + R.length + "</b> " + CAP[i];
+      mark();
+      if (i < 0) { walk.classList.remove("on"); spot.style.cssText = ""; return; }
+      var ox = img.offsetLeft, oy = img.offsetTop, k = img.clientWidth / 1626, r = R[i];
+      spot.style.left = ox + r[0] * k + "px"; spot.style.top = oy + r[1] * k + "px";
+      spot.style.width = r[2] * k + "px"; spot.style.height = r[3] * k + "px";
+      walk.classList.add("on");
+    }
+    Array.prototype.forEach.call(cols, function (c, j) {
+      c.addEventListener("mouseenter", function () { held = true; set(j); });
+      c.addEventListener("mouseleave", function () { held = false; });
+      c.addEventListener("click", function () { held = true; set(j); });
+    });
+    window.addEventListener("resize", function () { if (cur >= 0) set(cur); });
+    if ("IntersectionObserver" in window) new IntersectionObserver(function (es) {
+      vis = es[0].isIntersecting;
+      if (vis && cur < 0 && !reduce) set(0);
+    }, { threshold: 0.4 }).observe(walk);
+    /* steps 1, 2, 3, then the whole figure, then again */
+    if (!reduce) setInterval(function () {
+      if (!vis || held || pinned || document.hidden) return;
+      set(cur >= R.length - 1 ? -1 : cur + 1);
+    }, 3200);
+  })();
 
   function tabs(listEl, panelEl, data, render, withCount) {
     data.forEach(function (d, i) {
@@ -736,6 +1058,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: s
       render(data[i]);
     }
     select(0);
+    return select;
   }
 
   tabs(document.getElementById("demo-tabs"), document.getElementById("demo-panel"), DEMOS, function (d) {
@@ -759,16 +1082,34 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: s
         return '<button type="button" data-v="' + o[0] + '" aria-pressed="' + (String(o[0]) === String(cur)) + '">' + o[1] + "</button>";
       }).join("") + "</span>";
     }
+    /* continuous play: when a clip ends the next one in the list starts, wrapping round */
+    var seq = 0;
+    function chain(i, my) {
+      var vs = detail.querySelectorAll("video");
+      if (!vs.length) { setTimeout(function () { if (my === seq) show((i + 1) % d.items.length); }, 4000); return; }
+      Array.prototype.forEach.call(vs, function (v) {
+        v.loop = false;
+        v.addEventListener("ended", function () { if (my === seq) show((i + 1) % d.items.length); });
+      });
+    }
     function show(i) {
+      var my = ++seq;
       var it = d.items[i], st = { run: 1, cam: "table" };
       btns.forEach(function (b, j) { b.setAttribute("aria-pressed", j === i ? "true" : "false"); });
       detail.innerHTML = card(it, true);
-      var slot = detail.querySelector(".slot"), ctl = "", runs = [];
+      var slot = detail.querySelector(".slot"), ctl = "", runs = [], slots = [slot], anchor = slot;
+      if (it.pair) {
+        /* two resets of the same scene, side by side */
+        anchor = document.createElement("div"); anchor.className = "pair";
+        slot.parentNode.insertBefore(anchor, slot); anchor.appendChild(slot);
+        var s2 = slot.cloneNode(false); s2.dataset.video = "assets/videos/" + it.v.replace(/\.mp4$/, "") + "_run2.mp4";
+        anchor.appendChild(s2); slots.push(s2);
+        slot.dataset.tag = "Reset 1"; s2.dataset.tag = "Reset 2";
+      }
       for (var k = 1; k <= (it.runs || 1); k++) runs.push([k, "Run " + k]);
       if (runs.length > 1) ctl += seg("run", runs, 1);
       if (it.wrist) ctl += seg("cam", [["table", "Table cam"], ["wrist", "Wrist cam"]], "table");
-      ctl += seg("rate", [[1, "1×"], [2, "2×"], [4, "4×"]], rate);
-      slot.insertAdjacentHTML("afterend", '<div class="ctl">' + ctl + "</div>");
+      if (ctl) anchor.insertAdjacentHTML("afterend", '<div class="ctl">' + ctl + "</div>");
       detail.querySelectorAll(".seg button").forEach(function (b) {
         b.addEventListener("click", function () {
           var key = b.parentNode.dataset.k, val = b.dataset.v;
@@ -776,13 +1117,23 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: s
           if (key === "rate") { rate = +val; detail.querySelectorAll("video").forEach(function (v) { v.playbackRate = rate; }); return; }
           st[key] = key === "run" ? +val : val;
           /* file naming: name.mp4, name_run2.mp4, name_wrist.mp4, name_run2_wrist.mp4 */
+          if (it.pair) {
+            slots.forEach(function (x, j) {
+              x.dataset.video = "assets/videos/" + it.v.replace(/\.mp4$/, "") + (j ? "_run2" : "") + (st.cam === "wrist" ? "_wrist" : "") + ".mp4";
+              mountSlot(x);
+            });
+            chain(i, my);
+            return;
+          }
           var first = st.run === 1 && st.cam === "table";
           slot.dataset.video = "assets/videos/" + it.v.replace(/\.mp4$/, "") + (st.run > 1 ? "_run" + st.run : "") + (st.cam === "wrist" ? "_wrist" : "") + ".mp4";
           if (it.frames && first) slot.dataset.frames = it.frames; else slot.removeAttribute("data-frames");
           mountSlot(slot);
+          chain(i, my);
         });
       });
-      mountSlot(slot);
+      slots.forEach(mountSlot);
+      chain(i, my);
     }
     btns.forEach(function (b, i) {
       b.addEventListener("click", function () { show(i); });
@@ -790,27 +1141,120 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: s
     });
     show(0);
   }, true);
-  /* the wall reuses the demo clips, so it needs no extra files */
-  var WALL = [["blocks", 3], ["unseen", 0], ["extract", 0], ["unseen", 1], ["blocks", 4], ["extract", 1], ["unseen", 3], ["extract", 2]];
-  document.getElementById("wall").innerHTML = WALL.map(function (w) {
-    var g = DEMOS.filter(function (x) { return x.id === w[0]; })[0], it = g.items[w[1]];
-    return '<a href="#demos" aria-label="' + esc(it.t) + ', see demos"><div class="slot" data-bare="1" data-video="assets/videos/' + it.v + '"' +
-      (it.frames ? ' data-frames="' + it.frames + '"' : "") + ' data-tag="' + esc(it.t) + '"></div></a>';
+  /* the wall shows one reset of every block scene, one scene per column */
+  var BLK = DEMOS.filter(function (d) { return d.id === "blocks"; })[0].items;
+  document.getElementById("wall").innerHTML = BLK.map(function (it) {
+    return [1].map(function (run) {
+      return '<a href="#demos" aria-label="' + esc(it.t) + ", reset " + run + ', see demos"><div class="slot" data-bare="1" data-video="assets/videos/' +
+        it.v.replace(/\.mp4$/, "") + (run > 1 ? "_run2" : "") + '.mp4"' + (it.b ? ' data-a="' + it.a + '" data-b="' + it.b + '"' : "") + ' data-tag="' + esc(it.t) + '"></div></a>';
+    }).join("");
   }).join("");
-  document.querySelectorAll(".teaser .slot, .mclips .slot").forEach(mountSlot);
+  /* out-of-distribution strip under the teaser: only clips that exist are shown,
+     so the drawer appears by itself once assets/videos/extract_drawer.mp4 is added */
+  var OOD = [
+    /* from / to: the first reset inside each (already trimmed) clip, in seconds */
+    { t: "Drawer", v: "extract_drawer.mp4", from: 0, to: 28.5 },
+    { t: "Transparent bottle", v: "unseen_clear_bottle.mp4", from: 0.25, to: 17.5 },
+    { t: "Rice ball", v: "unseen_rice_ball.mp4", from: 0, to: 16.29 },
+    { t: "Gear", v: "unseen_gear.mp4", from: 0, to: 6.25 },
+    { t: "Test tube", v: "extract_test_tube.mp4", from: 0, to: 12.25 },
+    { t: "Mug", v: "unseen_mug.mp4", from: 0, to: 14.25 },
+    { t: "Soda can", v: "unseen_soda_can.mp4", from: 0.25, to: 13.25 },
+    { t: "Soft-pack drink", v: "unseen_soft_pack_drink.mp4", from: 0, to: 19.75 }
+  ].filter(function (it) { return hasVideo(it.v); });
+  var ood = document.getElementById("ood");
+  ood.style.setProperty("--n", OOD.length > 6 ? Math.ceil(OOD.length / 2) : OOD.length);
+  ood.innerHTML = OOD.map(function (it) {
+    return '<a href="#demos" aria-label="' + esc(it.t) + ', see demos"><div class="slot" data-bare="1" data-video="assets/videos/' + it.v + '"' + (it.to ? ' data-from="' + it.from + '" data-to="' + it.to + '"' : "") + ' data-tag="' + esc(it.t) + '"></div></a>';
+  }).join("");
+  document.getElementById("ood-n").textContent = "none of these objects appear in training · " + OOD.length + " clips";
+  document.querySelectorAll(".teaser .slot, .wallbox .slot").forEach(mountSlot);
+  /* Synced strip: all clips start together and each plays its whole reset at its own
+     length (arm leaves home to arm back home). A clip that finishes early holds its last
+     frame; once the longest one is done the whole row starts again as one. */
+  (function () {
+    var HOLD = 1500, vids = [], timer = 0, visible = false, token = 0;
+    ood.querySelectorAll(".slot[data-to]").forEach(function (sl) {
+      var v = sl.querySelector("video"); if (v) vids.push(v);
+    });
+    if (!vids.length) return;
+    function stop() { token++; clearTimeout(timer); vids.forEach(function (v) { v.pause(); }); }
+    function cycle() {
+      var my = ++token, seeking = vids.length, running = vids.length;
+      clearTimeout(timer);
+      function go() {
+        if (my !== token) return;
+        vids.forEach(function (v) {
+          v.playbackRate = 1;
+          v.addEventListener("ended", function () {
+            if (my === token && --running === 0) timer = setTimeout(cycle, HOLD);
+          }, { once: true });
+          var p = v.play(); if (p && p.catch) p.catch(function () {});
+        });
+      }
+      /* start only once every clip is back at its first frame; do not wait forever on a slow one */
+      var fallback = setTimeout(go, 4000), started = false;
+      function ready() { if (started) return; started = true; clearTimeout(fallback); go(); }
+      vids.forEach(function (v) {
+        v.pause();
+        var done = false;
+        function ok() { if (done) return; done = true; v.removeEventListener("seeked", ok); if (--seeking === 0) ready(); }
+        v.addEventListener("seeked", ok);
+        if (v.readyState >= 1) v.currentTime = 0;
+        else v.addEventListener("loadedmetadata", function () { v.currentTime = 0; }, { once: true });
+      });
+    }
+    if (reduce) return;
+    if (!("IntersectionObserver" in window)) { cycle(); return; }
+    new IntersectionObserver(function (es) {
+      var on = es[0].isIntersecting;
+      if (on && !visible) cycle(); else if (!on && visible) stop();
+      visible = on;
+    }, { threshold: 0.15 }).observe(ood);
+  })();
+  (function () {
+    var n = document.getElementById("loop-n"), b = document.querySelector("#loop .b1"), k = 1;
+    if (n && b) b.addEventListener("animationiteration", function () { n.textContent = ++k; });
+  })();
 
-  /* ---------- instruction ticker ---------- */
-  var LINES = [
-    pp("purple", "cylinder", "on the left", "white"),
-    pp("red", "cylinder", null, "red"),
-    pp("blue", "triangle", "on the top", "blue"),
-    ["take the", ["c", "blue"], "object", ["a", "out of"], "the", ["c", "black"], ["a", "hub"]],
-    pp("orange", "triangle", "on the top", "white")
-  ];
-  var tk = document.getElementById("ticker"), li = 0;
-  tk.innerHTML = instr(LINES[0]);
-  if (!reduce) setInterval(function () { li = (li + 1) % LINES.length; tk.innerHTML = instr(LINES[li]); }, 3200);
   document.getElementById("idea-instr").innerHTML = "“" + instr(pp("red", "cylinder", "on the left", "red")) + "”";
+
+  /* ---------- run summary above the top video: rounds fill in one by one ---------- */
+  (function () {
+    var hd = document.querySelector(".runhd"); if (!hd) return;
+    var cells = hd.querySelectorAll(".runlog .cells i"), nums = hd.querySelectorAll(".runstats b");
+    if (!cells.length || nums.length < 3) return;
+    var total = nums[0].textContent, score = nums[2].textContent, tok = 0;
+    Array.prototype.forEach.call(cells, function (c, i) { c.style.setProperty("--i", i); });
+    hd.classList.add("anim");
+    hd._onplay = function () {
+      var my = ++tok;
+      if (reduce) return;
+      /* the counters follow the bar: rounds done so far, and how many of them needed no help */
+      var ok = 0;
+      Array.prototype.forEach.call(cells, function (c, i) {
+        setTimeout(function () {
+          if (my !== tok) return;
+          if (!c.classList.contains("x")) ok++;
+          if (i === 0) ok = c.classList.contains("x") ? 0 : 1;
+          nums[0].textContent = i + 1;
+          nums[2].textContent = ok + " / " + (i + 1);
+          if (i === cells.length - 1) { nums[0].textContent = total; nums[2].textContent = score; }
+        }, i * 70 + 120);
+      });
+    };
+    /* plays only once the reader has scrolled and the whole bar is on screen, never on page load */
+    var log = hd.querySelector(".runlog"), inView = false, scrolled = window.scrollY > 40;
+    function check() { if (inView && scrolled && !hd.classList.contains("play")) fire(hd); }
+    if (reduce || !("IntersectionObserver" in window)) { fire(hd); return; }
+    window.addEventListener("scroll", function () { if (!scrolled && window.scrollY > 40) { scrolled = true; check(); } }, { passive: true });
+    new IntersectionObserver(function (es) {
+      var e = es[0];
+      inView = e.isIntersecting && e.intersectionRatio >= 0.95;
+      if (inView) check();
+      else if (!e.isIntersecting) { tok++; hd.classList.remove("play"); nums[0].textContent = total; nums[2].textContent = score; }
+    }, { threshold: [0, 0.95] }).observe(log);
+  })();
 
   /* ---------- results at a glance (Table 3) ---------- */
   var T3 = [
@@ -826,15 +1270,69 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: s
     var cap = [r.fp + " first pass"]; if (r.rt) cap.push(r.rt + " retry"); cap.push(r.hu + " human");
     var d = document.createElement("div");
     d.className = "row" + (r.ours ? " ours" : "");
+    /* all rows start together; time grows with TTR, so the lowest TTR settles first */
+    var dur = 0.6 + pct / 100 * 2.0;
+    d.style.setProperty("--d", "0s");
+    d.style.setProperty("--t", dur.toFixed(2) + "s");
     d.innerHTML = '<span class="m">' + r.m + "</span>" +
       '<div><div class="split" role="img" aria-label="' + cap.join(", ") + '">' + seg("fp", r.fp) + seg("rt", r.rt) + seg("hu", r.hu) + '</div><div class="splitcap num">' + cap.join(" · ") + "</div></div>" +
-      '<div class="rulerwrap"><div class="ruler" role="img" aria-label="TTR ' + r.ttr.toFixed(2) + ' on a scale from 1 to 3"><span class="to" style="width:' + pct + '%"></span><span class="dot" style="left:' + pct + '%"></span></div><b>' + r.ttr.toFixed(2) + "</b></div>";
+      '<div class="rulerwrap"><div class="ruler" role="img" aria-label="TTR ' + r.ttr.toFixed(2) + ' on a scale from 1 to 3"><span class="to" style="width:' + pct + '%"></span><span class="dot" style="left:' + pct + '%"></span></div><b data-ttr="' + r.ttr + '" data-ms="' + Math.round(dur * 1000) + '">' + r.ttr.toFixed(2) + "</b></div>";
     g.appendChild(d);
   });
   var ax = document.createElement("div");
   ax.className = "row"; ax.style.borderBottom = "0"; ax.style.paddingTop = "6px";
   ax.innerHTML = '<span></span><span></span><div class="axis"><span>1.00 · every object first try</span><span>3.00 · all human</span></div>';
   g.appendChild(ax);
+  regAnim(g, function () {
+    Array.prototype.forEach.call(g.querySelectorAll("b[data-ttr]"), function (b, i) { countUp(b, 1, +b.getAttribute("data-ttr"), +b.getAttribute("data-ms"), 0); });
+  });
+
+  /* ---------- per-scene outcomes (Table 2): one square per reset ---------- */
+  var SCN = ["Side-by-Side", "Twin-Tower", "Three-Pillars", "Bridge", "Totem"];
+  var ALLH = [0, 0, 25];
+  var PER = [
+    { id: "sis", label: "Sisyphus", items: [], s: [[20, 0, 5], [21, 0, 4], [22, 0, 3], [23, 0, 2], [20, 1, 4]] },
+    { id: "mp", label: "MP Skill", items: [], s: [[3, 0, 22], ALLH, ALLH, ALLH, ALLH] },
+    { id: "hal", label: "HALTER", items: [], s: [ALLH, ALLH, ALLH, ALLH, ALLH] },
+    { id: "ae", label: "AutoEval", items: [], s: [ALLH, ALLH, ALLH, ALLH, ALLH] }
+  ];
+  var scenes = document.getElementById("scenes"), sgrid = document.getElementById("scene-grid");
+  var sceneSel = tabs(document.getElementById("scene-tabs"), sgrid, PER, function (m) {
+    sgrid.innerHTML = m.s.map(function (c, k) {
+      var sq = "", i = 0;
+      [["fp", c[0]], ["rt", c[1]], ["hu", c[2]]].forEach(function (o) { for (var j = 0; j < o[1]; j++) sq += '<i class="' + o[0] + '" style="--i:' + (i++) + '"></i>'; });
+      var cap = c[0] + " first pass"; if (c[1]) cap += ", " + c[1] + " retry"; cap += ", " + c[2] + " human";
+      return '<div class="scene"><div class="dots" role="img" aria-label="' + SCN[k] + ": " + cap + '">' + sq + '</div><div class="nm">' + SCN[k] + '</div><div class="ct">' + c[0] + " / 25 first pass" + (c[1] ? " · " + c[1] + " retry" : "") + "</div></div>";
+    }).join("");
+    if (scenes.classList.contains("play")) { scenes.classList.remove("play"); void scenes.offsetWidth; scenes.classList.add("play"); }
+  }, false);
+  regAnim(scenes);
+  /* ---------- extraction and unseen objects (Tables 4 and 5) ---------- */
+  function strip(label, sub, c, ttr, ours, sz) {
+    var sq = "", i = 0, n = c[0] + c[1] + c[2];
+    [["fp", c[0]], ["rt", c[1]], ["hu", c[2]]].forEach(function (o) { for (var j = 0; j < o[1]; j++) sq += '<i class="' + o[0] + '" style="--i:' + (i++) + '"></i>'; });
+    var cap = c[0] + " first pass, " + c[1] + " retry, " + c[2] + " human";
+    return '<div class="strip' + (ours ? " ours" : "") + '"><span class="lb">' + label + (sub ? "<small>" + sub + "</small>" : "") + '</span><div class="dots" role="img" aria-label="' + label + ": " + cap + '" style="--n:' + n + (sz ? ";--sz:" + sz : "") + '">' + sq + '</div><b data-ttr="' + ttr + '">' + ttr.toFixed(2) + "</b></div>";
+  }
+  var GH = function (t) { return '<div class="gh"><span>' + t + "</span><span>TTR</span></div>"; };
+  document.getElementById("x-strips").innerHTML =
+    GH("USB stick · 25 resets") + strip("MP Skill", "", [0, 3, 22], 2.88) + strip("HALTER", "", [0, 3, 22], 3.00) + strip("Sisyphus", "", [23, 2, 0], 1.16, true) +
+    GH("Test tube · 25 resets") + strip("MP Skill", "", [10, 0, 15], 2.20) + strip("HALTER", "", [8, 9, 8], 2.12) + strip("Sisyphus", "", [25, 0, 0], 1.00, true);
+  document.getElementById("o-strips").innerHTML =
+    GH("Unseen objects · Sisyphus · 5 resets each") + strip("Mug", "blue + cylinder", [5, 0, 0], 1.00, false, "16px") + strip("Soft-pack drink", "purple + bar", [5, 0, 0], 1.00, false, "16px") +
+    strip("Rice ball", "blue + triangle", [4, 0, 1], 1.40, false, "16px") + strip("Packaged bread", "blue + bar", [3, 0, 2], 1.80, false, "16px") + strip("Soda can", "red + cylinder", [3, 0, 2], 1.80, false, "16px");
+  var xo = document.getElementById("xo");
+  regAnim(xo, function () {
+    Array.prototype.forEach.call(xo.querySelectorAll("b[data-ttr]"), function (b, i) { countUp(b, 1, +b.getAttribute("data-ttr"), 1000, 200); });
+  });
+
+  /* cycles through the methods on its own until the reader picks one */
+  var sIdx = 0, sAuto = !reduce;
+  ["pointerdown", "keydown"].forEach(function (ev) { scenes.addEventListener(ev, function () { sAuto = false; }); });
+  setInterval(function () {
+    if (!sAuto || !scenes.classList.contains("play") || document.hidden) return;
+    sIdx = (sIdx + 1) % PER.length; sceneSel(sIdx);
+  }, 4200);
 
   /* ---------- ablations (Tables 6 to 9) ---------- */
   var Y = "✓", N = "–";
@@ -857,7 +1355,13 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: s
     var tb = a.rows.map(function (r, ri) {
       return "<tr" + (ri === a.rows.length - 1 ? ' class="ours"' : "") + ">" + r.map(function (c, i) { return "<td" + (a.left.indexOf(i) >= 0 ? ' class="l"' : "") + ">" + c + "</td>"; }).join("") + "</tr>";
     }).join("");
-    document.getElementById("abl-panel").innerHTML = '<div class="tablebox"><table><thead><tr>' + th + "</tr></thead><tbody>" + tb + '</tbody></table></div><p class="takeaway">' + a.take + "</p>";
+    var bars = '<div class="abars anim" id="abars"><div class="cap"><span>TTR 1.00</span><span>lower is better</span><span>3.00</span></div>' + a.rows.map(function (r, ri) {
+      var t = +r[r.length - 1];
+      return '<div class="abar' + (ri === a.rows.length - 1 ? " ours" : "") + '" style="--i:' + ri + ";--w:" + Math.max(1.5, (t - 1) / 2 * 100) + '%"><span class="lb">' + r[0] + '</span><span class="tr"><span class="fl"></span></span><b>' + t.toFixed(2) + "</b></div>";
+    }).join("") + "</div>";
+    document.getElementById("abl-panel").innerHTML = bars + '<details class="more"><summary>Full table</summary><div class="tablebox"><table><thead><tr>' + th + "</tr></thead><tbody>" + tb + '</tbody></table></div></details><p class="takeaway">' + a.take + "</p>";
+    var ab = document.getElementById("abars");
+    if (animObs) animObs.observe(ab); else ab.classList.add("play");
   }, false);
 
 })();
